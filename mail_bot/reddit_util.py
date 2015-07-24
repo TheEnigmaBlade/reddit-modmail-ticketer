@@ -13,7 +13,7 @@ def init_reddit_session():
 	global _oauth_start, _oauth_length
 	
 	try:
-		import config
+		import bot_config as config
 		
 		print("Connecting to reddit...", end=" ")
 		r = praw.Reddit(user_agent=config.useragent, api_request_delay=1.0, cache_timeout=20)

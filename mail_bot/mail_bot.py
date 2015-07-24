@@ -15,7 +15,7 @@ from threading import Event
 from time import time
 from requests import HTTPError
 from praw.errors import ModeratorRequired, ModeratorOrScopeRequired
-import reddit_util, cache as cache_util, config
+import reddit_util, cache as cache_util, bot_config as config
 
 r = None
 message_caches = dict()

@@ -27,6 +27,34 @@ ALLOWED_HOSTS = ["*"]
 WSGI_APPLICATION = 'ModmailTicketer.wsgi.application'
 USE_X_FORWARDED_HOST = not DEBUG
 
+# Logging
+"""if not DEBUG:
+	LOGGING = {
+	'version': 1,
+	'disable_existing_loggers': True,
+	'formatters': {
+		'verbose': {
+			'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s'
+		}
+	},
+	'handlers': {
+		'error_file': {
+			'level': 'DEBUG',
+			'class': 'logging.handlers.RotatingFileHandler',
+			'formatter': 'verbose',
+			'filename': '/root/web/ModmailTicketer/logs/gunicorn_errors.log',
+			'maxBytes': 1024 * 1024 * 10,  # 100 mb
+		}
+	},
+	'loggers': {
+		'gunicorn.errors': {
+			'level': 'error_file',
+			'handlers': ['modmailticketer'],
+			'propagate': True,
+		},
+	}
+}"""
+
 # Application definition
 
 INSTALLED_APPS = (
@@ -154,7 +182,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_public')
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (

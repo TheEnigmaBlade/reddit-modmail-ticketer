@@ -1,4 +1,4 @@
-from ModmailTicketer.settings import DEBUG
+DEBUG = True
 
 useragent			= "script:Modmail Ticketer Backend:v0.2dev (by /u/TheEnigmaBlade)"
 if DEBUG:
