@@ -1,0 +1,29 @@
+{% set status_check = get_status_class(status_filter) %}
+
+<li class="subreddit subreddit-{{ subreddit.name }}{% if is_active %} active{% endif %}">
+	<a data-toggle="collapse" href="#subreddit-options-{{ subreddit.name }}">
+		<h1 class="subreddit-header">
+			<span>/r/{{ subreddit.name }}</span><span class="badge msg-count{% if num_unread > 0 %} badge-red{% endif %}">{{ num_unread }}</span>
+		</h1>
+	</a>
+	<ul id="subreddit-options-{{ subreddit.name }}" class="subreddit-options collapse{% if is_active %} in{% endif %}">
+		<li class="{% if custom_filter == "mine" %}active{% endif %}">
+			<a href="{{ url("main:subreddit_mine", subreddit.name) }}">my tickets<span class="badge msg-count">{{ num_mine }}</span><span class="glyphicon glyphicon-chevron-right"></span></a>
+		</li>
+		<li class="{% if (not status_check and not custom_filter) or status_check == "all" %}active{% endif %}">
+			<a href="{{ url("main:subreddit_all", subreddit.name) }}">all<span class="glyphicon glyphicon-chevron-right"></span></a>
+		</li>
+		<li class="{% if status_check == "open" %}active{% endif %}">
+			<a href="{{ url("main:subreddit_open", subreddit.name) }}">open<span class="glyphicon glyphicon-chevron-right"></span></a>
+		</li>
+		<li class="{% if status_check == "active" %}active{% endif %}">
+			<a href="{{ url("main:subreddit_active", subreddit.name) }}">active<span class="glyphicon glyphicon-chevron-right"></span></a>
+		</li>
+		<li class="{% if status_check == "closed" %}active{% endif %}">
+			<a href="{{ url("main:subreddit_closed", subreddit.name) }}">closed<span class="glyphicon glyphicon-chevron-right"></span></a>
+		</li>
+		<li class="{% if status_check == "ignored" %}active{% endif %}">
+			<a href="{{ url("main:subreddit_ignored", subreddit.name) }}">ignored<span class="glyphicon glyphicon-chevron-right"></span></a>
+		</li>
+	</ul>
+</li>

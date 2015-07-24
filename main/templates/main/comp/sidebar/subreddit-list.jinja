@@ -1,0 +1,22 @@
+{# Current user info #}
+{% if request.user.is_authenticated() %}
+	{% set user_subreddits = request.user.redditor.get_subreddits() %}
+{% else %}
+	{% set user_subreddits = [] %}
+{% endif %}
+
+{# Current subreddit info #}
+{% if subreddit %}
+	{% set active_subreddit = subreddit.name %}
+{% else %}
+	{% set active_subreddit = "" %}
+{% endif %}
+
+<ul id="subreddit-list">
+{% for subreddit in user_subreddits %}
+	{% set is_active = subreddit.name == active_subreddit %}
+	{% set num_unread = subreddit.get_num_open_tickets() %}
+	{% set num_mine = subreddit.get_num_user_tickets(request.user.redditor) %}
+	{% include "main/comp/sidebar/subreddit-list-subreddit.jinja" %}
+{% endfor %}
+</ul>

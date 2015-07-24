@@ -1,0 +1,12 @@
+{% extends "main/base.jinja" %}
+
+{% block main_content %}
+<div id="page-wrapper">
+	<div id="page-sidebar">
+	{% block sidebar_area scoped %}{% endblock %}
+	</div>
+	<div id="page-content">
+	{% block content_area scoped %}{% endblock %}
+	</div>
+</div>
+{% endblock %}

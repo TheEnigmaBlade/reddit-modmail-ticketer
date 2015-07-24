@@ -1,0 +1,7 @@
+<div id="no-messages">
+{% if request.user.is_authenticated() %}
+	<p class="info-message">select a subreddit to view tickets</p>
+{% else %}
+	<p class="info-message">log in to view your subreddits</p>
+{% endif %}
+</div>

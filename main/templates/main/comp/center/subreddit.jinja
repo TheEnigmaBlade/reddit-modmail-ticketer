@@ -1,0 +1,16 @@
+<table id="message-list" class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th class="col-date">Created</th>
+			<th class="col-type">Type</th>
+			<th class="col-subject">Subject</th>
+			<th class="col-sender">Sender</th>
+			<th class="col-status">Status</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for ticket in tickets %}
+		{% include "main/comp/center/subreddit_ticket.jinja" %}
+	{% endfor %}
+	</tbody>
+</table>

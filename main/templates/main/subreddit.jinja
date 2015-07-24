@@ -1,0 +1,11 @@
+{% extends "main/base_with_sidebar.jinja" %}
+{% set current_page = "subreddit" %}
+
+{% block sidebar_area %}
+	{% include "main/comp/sidebar/subreddit-list.jinja" %}
+{% endblock %}
+
+{% block content_area %}
+	{# {% include "main/comp/center/toolbar.jinja" %} #}
+	{% include "main/comp/center/subreddit.jinja" %}
+{% endblock %}

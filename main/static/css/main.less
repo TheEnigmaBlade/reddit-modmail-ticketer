@@ -1,0 +1,176 @@
+@import (reference) "_options";
+@import (reference) "_mixins";
+@import "_lib";
+
+#page-navbar {
+	margin-bottom: 0;
+	
+	padding-right: 8px;
+}
+
+#page-wrapper {
+	display: flex;
+	align-items: stretch;
+	min-height: ~"calc(100vh - 51px)";
+}
+
+#page-sidebar {
+	flex-grow: 0;
+	width: @sidebar-width;
+	
+	background-color: @sidebar-bg;
+	border-right: 1px solid @sidebar-border-color;
+	
+	ul {
+		list-style: none;
+	}
+	
+	a, a:hover, a:focus {
+		outline: none;
+		text-decoration: none;
+	}
+	
+	#subreddit-list {
+		margin: 0;
+		padding: 0;
+		
+		.subreddit {
+			h1 {
+				margin: 0;
+				padding: @sidebar-padding;
+				
+				border-bottom: 1px solid @sidebar-border-color;
+				
+				font-size: 16px;
+				font-weight: bold;
+			}
+			
+			.msg-count {
+				float: right;
+			}
+		}
+		
+		.subreddit-options {
+			margin: 0;
+			padding: 0;
+			
+			li {
+				border-bottom: 1px solid @sidebar-border-color;
+				
+				a {
+					display: inline-block;
+					width: 100%;
+					
+					padding: @sidebar-padding @sidebar-padding @sidebar-padding (@sidebar-padding + @sidebar-subreddit-indent);
+					
+					&:hover {
+						background-color: @sidebar-active-color;
+					}
+				}
+				
+				.glyphicon-chevron-right {
+					display: none;
+					float: right;
+					
+					margin-right: 4px;
+				}
+				
+				&:hover {
+					a {
+						background-color: @sidebar-active-color;
+					}
+					
+					.glyphicon-chevron-right {
+						display: inline-block;
+					}
+				}
+			}
+		}
+		
+		.subreddit.active .subreddit-options li.active {
+			a {
+				background-color: @sidebar-active-color;
+			}
+					
+			.glyphicon-chevron-right {
+				display: inline-block;
+			}
+		}
+	}
+}
+
+#page-content {
+	flex-grow: 1;
+	
+	background-color: @content-bg;
+	
+	#no-messages {
+		width: 100%;
+		height: 100%;
+		padding: 0 20px;
+		
+		text-align: center;
+		vertical-align: middle;
+		
+		.info-message {
+			display: block;
+			position: relative;
+			top: 40%;
+			
+			font-size: @content-info-message-size;
+			color: @content-info-message-color;
+			
+			&.error-message:extend(.error-message) {}
+		}
+	}
+	
+	#message-list {
+		.ticket {
+			.col-date {
+				width: 90px;
+				line-height: 20px;
+				
+				font-size: 11px;
+			}
+			
+			.col-type {
+				width: 50px;
+			}
+			
+			.col-subject {
+				.popover {
+					max-width: 500px;
+				}
+			}
+			
+			.col-status {
+				min-width: 100px;
+				max-width: 150px;
+				
+				.status-button {
+					min-width: 55px;
+					
+					outline: none !important;
+				}
+				
+				.dropdown-menu {
+					min-width: 100px;
+				}
+			}
+		}
+	}
+}
+
+.date {
+	text-decoration: underline dotted;
+}
+
+.error-message {
+	color: @content-error-message-color;  
+}
+
+#image-404 {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}

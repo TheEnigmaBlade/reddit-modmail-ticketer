@@ -1,0 +1,10 @@
+{% extends "main/base_with_sidebar.jinja" %}
+{% set current_page = "" %}
+
+{% block sidebar_area %}
+	{% include "main/comp/sidebar/subreddit-list.jinja" %}
+{% endblock %}
+
+{% block content_area %}
+	<img id="image-404" src="{{ static("images/404.png") }}"/>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% macro css(static_name, rel="stylesheet") -%}
+	<link rel={{ rel }} href="{{ static("css/"+static_name) }}" />
+{%- endmacro %}
+	
+{% macro js(static_name) -%}
+	<script src="{{ static("js/"+static_name) }}"></script>
+{%- endmacro %}
+
+{% macro img(static_name) -%}
+{{ static("images/"+static_name) }}
+{%- endmacro %}
