@@ -28,32 +28,42 @@ WSGI_APPLICATION = 'ModmailTicketer.wsgi.application'
 USE_X_FORWARDED_HOST = not DEBUG
 
 # Logging
-"""if not DEBUG:
+if not DEBUG:
 	LOGGING = {
 	'version': 1,
-	'disable_existing_loggers': True,
+	'disable_existing_loggers': False,
 	'formatters': {
 		'verbose': {
 			'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s'
 		}
 	},
 	'handlers': {
-		'error_file': {
+		'django_log': {
 			'level': 'DEBUG',
 			'class': 'logging.handlers.RotatingFileHandler',
 			'formatter': 'verbose',
-			'filename': '/root/web/ModmailTicketer/logs/gunicorn_errors.log',
-			'maxBytes': 1024 * 1024 * 10,  # 100 mb
+			'filename': '/root/web/ModmailTicketer/logs/django.log',
+			'maxBytes': 1024 * 1024 * 10,  # 10 mb
 		}
 	},
 	'loggers': {
-		'gunicorn.errors': {
-			'level': 'error_file',
-			'handlers': ['modmailticketer'],
+		'django': {
+			'level': 'INFO',
+			'handlers': ['django_log'],
 			'propagate': True,
 		},
+		'django.request': {
+			'level': 'INFO',
+			'handlers': ['django_log'],
+			'propagate': False,
+		},
+		'django.security': {
+			'level': 'INFO',
+			'handlers': ['django_log'],
+			'propagate': False,
+		},
 	}
-}"""
+}
 
 # Application definition
 

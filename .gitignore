@@ -5,3 +5,4 @@ __pycache__
 /*.bat
 /*.sqlite3
 /mail_bot/msg_caches
+/main/static/css/*.css

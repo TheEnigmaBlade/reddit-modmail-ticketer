@@ -13,10 +13,15 @@
 {% endif %}
 
 <ul id="subreddit-list">
-{% for subreddit in user_subreddits %}
-	{% set is_active = subreddit.name == active_subreddit %}
-	{% set num_unread = subreddit.get_num_open_tickets() %}
-	{% set num_mine = subreddit.get_num_user_tickets(request.user.redditor) %}
-	{% include "main/comp/sidebar/subreddit-list-subreddit.jinja" %}
-{% endfor %}
+{% if user_subreddits|length > 0 %}
+	{% for subreddit in user_subreddits %}
+		{% set is_active = subreddit.name == active_subreddit %}
+		{% set num_unread = subreddit.get_num_open_tickets() %}
+		{% set num_mine = subreddit.get_num_user_tickets(request.user.redditor) %}
+		{% include "main/comp/sidebar/subreddit-list-subreddit.jinja" %}
+	{% endfor %}
+{% else %}
+	<li class="error-message">no known subreddits</li>
+	<li class="sub-error-message"><a href="/help/">learn how to add subreddits</a></li>
+{% endif %}
 </ul>

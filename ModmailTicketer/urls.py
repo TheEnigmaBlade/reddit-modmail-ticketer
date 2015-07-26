@@ -24,5 +24,7 @@ urlpatterns = [
 	url(r'', include("main.urls", namespace="main")),
 ]
 
+handler404 = "main.views.handler404"
+
 if settings.DEBUG:
 	urlpatterns += staticfiles_urlpatterns()

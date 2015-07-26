@@ -17,11 +17,7 @@ urlpatterns = [
 	
 	url("^api/ticket/(?P<ticket_id>[a-zA-Z0-9]+)/$", views.get_message_body, name="get_message_body"),
 	url("^api/ticket/(?P<ticket_id>[a-zA-Z0-9]+)/modify/$", views.modify_ticket, name="modify_ticket"),
-	
-	url(r'^404test$', "main.views.handler404"),
 ]
-
-handler404 = "main.views.handler404"
 
 admin.site.site_title = "Modmail Ticketer"
 admin.site.site_header = "Modmail Ticketer Administration"

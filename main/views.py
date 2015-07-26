@@ -14,23 +14,23 @@ def index(request):
 
 @require_safe
 def subreddit_all(request, subreddit):
-	return render_main_page(request, subreddit, order="-id")
+	return render_main_page(request, subreddit)
 
 @require_safe
 def subreddit_open(request, subreddit):
-	return render_main_page(request, subreddit, Ticket.Status.OPEN)
+	return render_main_page(request, subreddit, status_filter=Ticket.Status.OPEN)
 
 @require_safe
 def subreddit_active(request, subreddit):
-	return render_main_page(request, subreddit, Ticket.Status.ACTIVE)
+	return render_main_page(request, subreddit, status_filter=Ticket.Status.ACTIVE)
 
 @require_safe
 def subreddit_closed(request, subreddit):
-	return render_main_page(request, subreddit, Ticket.Status.CLOSED)
+	return render_main_page(request, subreddit, status_filter=Ticket.Status.CLOSED)
 
 @require_safe
 def subreddit_ignored(request, subreddit):
-	return render_main_page(request, subreddit, Ticket.Status.IGNORED)
+	return render_main_page(request, subreddit, status_filter=Ticket.Status.IGNORED)
 
 @require_safe
 def subreddit_mine(request, subreddit):
@@ -48,9 +48,10 @@ def render_main_page(request, subreddit=None, status_filter=None, custom_filter=
 		return render_subreddit_401(request, subreddit)
 	
 	# Get ticket list
-	if status_filter:
+	print("Status: {}".format(status_filter))
+	if status_filter is not None:
 		tickets = subreddit.get_status_tickets(status_filter)
-	elif custom_filter:
+	elif custom_filter is not None:
 		if custom_filter == "mine":
 			tickets = subreddit.get_user_tickets(request.user.redditor)
 		else:
@@ -60,8 +61,7 @@ def render_main_page(request, subreddit=None, status_filter=None, custom_filter=
 		tickets = subreddit.ticket_set.all()
 	
 	# Apply modifiers to ticket list
-	if order is not None:
-		tickets = tickets.order_by(order)
+	tickets = tickets.order_by("-id" if order is None else order)
 	tickets = tickets[:limit]
 	
 	return render(request, "main/subreddit.jinja", {"subreddit": subreddit, "tickets": tickets, "status_filter": status_filter, "custom_filter": custom_filter})
