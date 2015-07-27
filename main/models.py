@@ -23,6 +23,7 @@ class Subreddit(models.Model):
 	
 	enabled = models.BooleanField(default=True)
 	bots = models.CharField(max_length=209, default="AutoModerator", blank=True)
+	hl_users = models.CharField(max_length=209, default="", blank=True)
 	
 	def get_status_tickets(self, status):
 		if status is None:
@@ -54,12 +55,23 @@ class Subreddit(models.Model):
 
 class Message(models.Model):
 	id = models.CharField(max_length=6, primary_key=True)
-	subject = models.CharField(max_length=300)
-	sender = models.CharField(max_length=20)
-	sender_id = models.CharField(max_length=5)
+	subject = models.CharField(max_length=100, blank=True)
+	sender = models.CharField(max_length=20, blank=True)
+	sender_id = models.CharField(max_length=5, blank=True)
+	
+	def get_num_replies(self):
+		return self.replies.count()
 	
 	def __str__(self):
 		return "Message {}".format(self.pk)
+
+class MessageReply(models.Model):
+	id = models.CharField(max_length=6, primary_key=True)
+	sender = models.CharField(max_length=20, blank=True)
+	sender_id = models.CharField(max_length=5, blank=True)
+	
+	trunk_message = models.ForeignKey(Message, related_name="replies")
+	parent_reply = models.ForeignKey("self", related_name="replies", blank=True, null=True)
 
 class Ticket(models.Model):
 	message = models.OneToOneField(Message)
@@ -68,6 +80,8 @@ class Ticket(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	date_edited = models.DateTimeField(auto_now=True, null=True)
 	modified_by = models.ForeignKey(Redditor, null=True, blank=True)
+	
+	is_flagged = models.BooleanField(default=False)
 	
 	class Type(enum.IntEnum):
 		NORMAL = 0

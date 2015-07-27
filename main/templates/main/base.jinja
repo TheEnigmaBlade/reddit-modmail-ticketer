@@ -14,24 +14,7 @@
 {% block content scoped -%}
 
 {# Nav bar #}
-<nav id="page-navbar" class="navbar navbar-default navbar-static-top" data-topbar>
-	<div class="container-fluid">
-		{# Title area #}
-		<div class="navbar-header">
-			<a class="navbar-brand" href="{{ url("main:index") }}">modmail conductor</a>
-		</div>
-		<ul class="nav navbar-nav navbar-right">
-			{# User menu #}
-			<li>
-			{% if request.user.is_authenticated() %}
-				<p class="navbar-text">/u/{{ request.user.redditor.name }} (<a class="logout-button" href="{{ url('main:logout') }}">logout</a>)</p>
-			{% else %}
-				<p class="navbar-btn"><a class="btn btn-default login-button" href="{{ url('social:begin', 'reddit') }}?next={{ request.path }}">login through reddit</a></p>
-			{% endif %}
-			</li>
-		</ul>
-	</div>
-</nav>
+{% include "main/comp/navbar.jinja" %}
 
 {# Main content #}
 {% block main_content scoped %}{% endblock %}

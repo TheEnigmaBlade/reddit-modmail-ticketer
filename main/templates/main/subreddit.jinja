@@ -1,5 +1,5 @@
 {% extends "main/base_with_sidebar.jinja" %}
-{% set current_page = "subreddit" %}
+{% block body_class %}tickets{% endblock %}
 
 {% block sidebar_area %}
 	{% include "main/comp/sidebar/subreddit-list.jinja" %}

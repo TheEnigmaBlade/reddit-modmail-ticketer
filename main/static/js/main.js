@@ -40,7 +40,7 @@ function init_status_buttons() {
 						newStatus = data['status'],
 						newClass = "btn-" + data['status_class'];
 					
-					$ticket.attr('ticket_status', newStatus);
+					$ticket.data('ticketStatus', newStatus);
 					update_status_button($this, oldClass, newText, newClass);
 				}
 			})
@@ -71,9 +71,40 @@ function init_status_buttons() {
 						newStatus = data['status'],
 						newClass = "btn-" + data['status_class'];
 					
-					$ticket.attr('ticket_status', newStatus);
+					$ticket.data('ticketStatus', newStatus);
 					var $button = $ticket.find('.status-button');
 					update_status_button($button, oldClass, newText, newClass);
+				}
+			})
+			// Failure
+			.fail(function(data) {
+				console.error(data);
+			});
+	}));
+}
+
+function init_flag_buttons() {
+	$('.flag-button').click($.throttle(1000, function() {
+		console.log("Status button pressed");
+		var $this = $(this),
+			$ticket = $this.parents('.ticket'),
+			ticketId = $ticket.data('ticketId'),
+			isFlagged = $ticket.hasClass('flagged'),
+			nextState = isFlagged ? "0" : "1",
+			csrftoken = $.cookie('csrftoken');
+		
+		// Update server with new status
+		$.post("/api/ticket/" + ticketId + "/modify/?set_flagged=" + nextState, {csrfmiddlewaretoken: csrftoken})
+			// Success
+			.done(function(data) {
+				console.log(data);
+				if(data["success"]) {
+					if(isFlagged) {
+						$ticket.removeClass('flagged');
+					}
+					else {
+						$ticket.addClass('flagged');
+					}
 				}
 			})
 			// Failure
@@ -152,6 +183,7 @@ function init_last_modified_hover() {
 
 $(function() {
 	init_status_buttons();
+	init_flag_buttons();
 	init_message_hover();
 	init_last_modified_hover();
 });

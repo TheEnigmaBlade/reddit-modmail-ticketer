@@ -1,3 +1,4 @@
+{# Ticket info #}
 {% set message = ticket.message %}
 {% if ticket.modified_by %}
 	{% set last_modified = ticket.modified_by.name %}
@@ -8,13 +9,15 @@
 	{% set last_modified = "a ghost" %}
 {% endif %}
 
-<tr class="ticket" data-ticket-id="{{ ticket.id }}" data-ticket-status="{{ get_status_class(ticket.status) }}" data-last-modified-by="{{ last_modified }}">
+{# Ticket render #}
+<tr class="ticket{% if ticket.is_flagged %} flagged{% endif %}" data-ticket-id="{{ ticket.id }}" data-ticket-status="{{ get_status_class(ticket.status) }}" data-last-modified-by="{{ last_modified }}">
 	<td class="col-date"><span class="date" title="{{ ticket.date_created }}">{{ humanize_date(ticket.date_created) }}</span></td>
 	<td class="col-type">
 		<span class="label label-{{ get_type_label_class(ticket.type) }}">{{ get_type_string(ticket.type) }}</span>
 	</td>
-	<td class="col-subject"><a href="{{ get_message_url(message.id) }}" target="_blank">{{ message.subject }}</a></td>
+	<td class="col-subject"><a class="subject" href="{{ get_message_url(message.id) }}" target="_blank">{{ message.subject }}</a></td>
 	<td class="col-sender"><a href="{{ get_redditor_url(message.sender) }}" target="_blank">{{ message.sender }}</a></td>
+	<td class="col-replies">{{ message.get_num_replies() }}</td>
 	<td class="col-status">
 		<div class="btn-group">
 			{% set status_class = get_status_label_class(ticket.status) %}
@@ -30,5 +33,6 @@
 				<li><a class="status-button-set text-danger" status="ignored" href="javascript:">Ignored</a></li>
 			</ul>
 		</div>
+		<a href="javascript:" class="flag-button btn btn-xs btn-default"><span class="glyphicon glyphicon-flag"></span></a>
 	</td>
 </tr>

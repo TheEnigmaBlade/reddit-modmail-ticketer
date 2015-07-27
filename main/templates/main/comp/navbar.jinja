@@ -1,0 +1,43 @@
+<nav id="page-navbar" class="navbar navbar-default navbar-static-top" data-topbar>
+	<div class="container-fluid">
+		{# Title area (and everything non-collapsed) #}
+		<div class="navbar-header">
+			<a class="navbar-brand" href="{{ url("main:index") }}">modmail conductor</a>
+			{% if request.user.is_authenticated() %}
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			{% else %}
+			<p class="navbar-btn collapsed"><a class="btn btn-default login-button" href="{{ url('social:begin', 'reddit') }}?next={{ request.path }}">login through reddit</a></p>
+			{% endif %}
+		</div>
+		
+		{# Content #}
+		<div class="collapse navbar-collapse" id="main-navbar-collapse">
+			{# Left #}
+			<ul class="nav navbar-nav">
+				<li><a href="{{ url("main:help") }}">help</a></li>
+			</ul>
+			
+			{# Right #}
+			<ul class="nav navbar-nav navbar-right">
+				{# User menu #}
+				{% if request.user.is_authenticated() %}
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button">/u/{{ request.user.redditor.name }} <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a class="logout-button" href="{{ url('main:logout') }}"><span class="glyphicon glyphicon-log-out"></span> logout</a></li>
+					</ul>
+				</li>
+				{% else %}
+				<li>
+					<p class="navbar-btn"><a class="btn btn-default login-button" href="{{ url('social:begin', 'reddit') }}?next={{ request.path }}">login through reddit</a></p>
+				</li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>

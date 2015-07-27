@@ -22,6 +22,6 @@
 	{% endfor %}
 {% else %}
 	<li class="error-message">no known subreddits</li>
-	<li class="sub-error-message"><a href="/help/">learn how to add subreddits</a></li>
+	<li class="sub-error-message"><a href="{{ url("main:help") }}">learn how to add subreddits</a></li>
 {% endif %}
 </ul>

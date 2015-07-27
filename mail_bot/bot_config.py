@@ -1,6 +1,6 @@
 DEBUG = True
 
-useragent			= "script:Modmail Ticketer Backend:v0.2dev (by /u/TheEnigmaBlade)"
+useragent			= "script:Modmail Ticketer Backend:v0.2 (by /u/TheEnigmaBlade)"
 if DEBUG:
 	oauth_id		= "eu7AvirqDEuQeA"
 	oauth_secret	= "xQCmbClGmWMRDz4oMiFXGz2TWhU"
@@ -15,6 +15,6 @@ password			= "cQ*$%7Xu,r5B]6~\">)SO+y8lB9o%_}do"
 cache_location		= "msg_caches"
 
 if DEBUG:
-	state_update_length	= 1200
+	state_update_length	= 3600
 else:
 	state_update_length = 60

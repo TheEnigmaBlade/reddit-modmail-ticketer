@@ -76,6 +76,7 @@ INSTALLED_APPS = (
 	'django.contrib.staticfiles',
 	'django_jinja',
 	'social.apps.django_app.default',
+	'widget_tweaks',
 	'main'
 )
 

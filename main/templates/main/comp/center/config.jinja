@@ -1,0 +1,25 @@
+<div class="alert alert-warning" role="alert"><b>Warning:</b>This page is incomplete and is not yet intended for public use.</div>
+<h1 class="page-header">/r/{{ subreddit.name }} settings</h1>
+<form method="post">
+	{% csrf_token %}
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">ticket settings</h2>
+		</div>
+		<div class="panel-body">
+			<div class="form-group">
+				<label for="id_bots">{{ form.bots.label }}</label>
+				{{ form.bots|add_class("form-control") }}
+				<span class="help-block">{{ form.bots.help_text }}</span>
+			</div>
+			<div class="form-group">
+				<label for="id_hl_users">{{ form.hl_users.label }}</label>
+				{{ form.hl_users|add_class("form-control") }}
+				<span class="help-block">{{ form.hl_users.help_text }}</span>
+			</div>
+		</div>
+	</div>
+	
+	<button type="submit" class="btn btn-primary">save</button>
+</form>

@@ -6,7 +6,7 @@ import ModmailTicketer.settings
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ModmailTicketer.settings")
 django.setup()
 
-from main.models import Subreddit, Redditor, Message, Ticket
+from main.models import Subreddit, Redditor, Message, MessageReply, Ticket
 
 # Start bot stuff
 
@@ -97,7 +97,27 @@ def get_subreddit_messages(sub_id, sub_name):
 	return cache.get_diff(messages)
 
 def create_message_model(message_info):
-	return Message.objects.create(id=message_info.id, subject=message_info.subject, sender=message_info.author.name, sender_id=message_info.author.id)
+	id = message_info.id
+	subject = message_info.subject
+	sender = message_info.author
+	sender_name = sender.name if sender else None
+	sender_id = sender.id if sender else None
+	return Message.objects.create(id=id, subject=subject, sender=sender_name, sender_id=sender_id)
+
+def create_reply_model(reply_info, trunk):
+	id = reply_info.id
+	sender = reply_info.author
+	sender_name = sender.name if sender else None
+	sender_id = sender.id if sender else None
+	reply = MessageReply(id=id, sender=sender_name, sender_id=sender_id, trunk_message=trunk)
+	
+	# Add optional parent reply (not the first/trunk message)
+	parent_id = reply_info.parent_id
+	if parent_id and parent_id != trunk.id:
+		parent = MessageReply.objects.filter(id=parent_id)
+		if parent.count() > 0:
+			reply.parent_reply = parent[0]
+	reply.save()
 
 def create_ticket_model(message_info, message, sub):
 	ttype = get_ticket_type(message_info, sub)
@@ -142,6 +162,31 @@ def get_ticket_type(message_info, sub):
 
 # Looping stuff
 
+def process_message(message_info, sub):
+	try:
+		message = Message.objects.filter(id=message_info.id)
+		if message.count() == 0:
+			print("Is new message")
+			message = create_message_model(message_info)
+			create_ticket_model(message_info, message, sub)
+		else:
+			print("Is reply")
+			message = message[0]
+			old_reply_ids = [reply.id for reply in message.replies.all()]
+			
+			replies_info = message_info.replies
+			print("\tNum replies: {}".format(len(replies_info)))
+			
+			for reply_info in replies_info:
+				new_reply_id = reply_info.id
+				if new_reply_id not in old_reply_ids:
+					create_reply_model(reply_info, message)
+	except:
+		ex_type, ex, tb = sys.exc_info()
+		print("Error: Failed to process message ({})".format(ex))
+		traceback.print_tb(tb)
+		del tb
+
 def process_loop():
 	global r, running
 	
@@ -173,9 +218,11 @@ def process_loop():
 					sub = mod_subs[sub_id]
 					if "mail" in sub.mod_permissions or "all" in sub.mod_permissions:
 						enable_subreddit(sub)
-						cache = cache_util.load_thing_cache(config.cache_location+"/"+sub_id+".cache")
+						#cache = cache_util.load_message_cache(config.cache_location+"/"+sub_id+".cache")
+						cache = cache_util.MessageCache()
 						message_caches[sub_id] = cache
 						# Build initial cache
+						print("\tBuilding initial cache")
 						get_subreddit_messages(sub_id, sub.display_name)
 					else:
 						print("\t\tError: no mail permissions")
@@ -200,14 +247,7 @@ def process_loop():
 				sub = Subreddit.objects.get(id=sub_id)
 				new_messages = get_subreddit_messages(sub.id, sub.name)
 				for message_info in new_messages:
-					print(vars(message_info))
-					message = Message.objects.filter(id=message_info.id)
-					if message.count() == 0:
-						print("Is new message")
-						message = create_message_model(message_info)
-						create_ticket_model(message_info, message, sub)
-					else:
-						print("Is reply")
+					process_message(message_info, sub)
 			
 			if running and waitEvent.wait(timeout=20):
 				break
@@ -232,8 +272,12 @@ def process_loop():
 			#running = False
 			
 def main():
+	print("--------------------")
+	print("Starting mail bot")
 	process_loop()
+	print("Stopping mail bot")
 	reddit_util.destroy_reddit_session(r)
+	print("--------------------")
 
 if __name__ == "__main__":
 	main()

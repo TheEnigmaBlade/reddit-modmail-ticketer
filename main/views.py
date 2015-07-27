@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseForbidden, HttpResponseBadRequest, Http404
 from django.views.decorators.http import require_safe, require_POST, require_GET
 from django.contrib import auth
 from django.shortcuts import render, redirect, get_object_or_404
+from main.forms import SubredditForm
 from main.templatetags.stringify import get_status_class, get_status_label_class, get_status_string
 
 from .models import Subreddit, Redditor, Ticket
@@ -11,6 +12,10 @@ from .func import reddit_util
 @require_safe
 def index(request):
 	return render_main_page(request)
+
+@require_safe
+def help(request):
+	raise Http404()
 
 @require_safe
 def subreddit_all(request, subreddit):
@@ -65,6 +70,24 @@ def render_main_page(request, subreddit=None, status_filter=None, custom_filter=
 	tickets = tickets[:limit]
 	
 	return render(request, "main/subreddit.jinja", {"subreddit": subreddit, "tickets": tickets, "status_filter": status_filter, "custom_filter": custom_filter})
+
+@login_required
+def subreddit_config(request, subreddit):
+	# Subreddit info
+	subreddit = get_subreddit(subreddit)
+	if subreddit is None:
+		return render_subreddit_404(request, subreddit)
+	if not subreddit.user_moderates(request.user) or not subreddit.enabled:
+		return render_subreddit_401(request, subreddit)
+	
+	if request.method == "POST":
+		form = SubredditForm(request.POST, instance=subreddit)
+		if form.is_valid():
+			form.save()
+			return redirect("main:subreddit", subreddit.name)
+	else:
+		form = SubredditForm(instance=subreddit)
+		return render(request, "main/subreddit_config.jinja", {"subreddit": subreddit, "form": form, "custom_filter": "settings"})
 
 # Authentication
 
@@ -128,6 +151,17 @@ def modify_ticket(request, ticket_id):
 			"status": get_status_class(status),
 			"status_class": get_status_label_class(status),
 			"status_text": get_status_string(status)
+		})
+	if "set_flagged" in request.GET:
+		set_flagged = request.GET["set_flagged"] == "1"
+		if (set_flagged and not ticket.is_flagged) or (not set_flagged and ticket.is_flagged):
+			ticket.is_flagged = set_flagged
+			ticket.save()
+			print(ticket.is_flagged)
+		
+		return JsonResponse({
+			"success": True,
+			"flagged":  set_flagged
 		})
 	
 	return HttpResponseBadRequest()
