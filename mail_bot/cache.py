@@ -112,6 +112,9 @@ class MessageCache(ThingCache):
 		new_posts = list()
 		new_post_ids = list()
 		for post in posts:
+			if isinstance(post, str):
+				#print("Blame reddit for breaking things!")
+				continue
 			new_post_id = post.id
 			new_post_replies = len(post.replies)
 			
