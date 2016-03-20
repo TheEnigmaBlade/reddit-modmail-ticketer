@@ -25,6 +25,12 @@ class Subreddit(models.Model):
 	bots = models.CharField(max_length=209, default="AutoModerator", blank=True)
 	hl_users = models.CharField(max_length=209, default="", blank=True)
 	
+	auto_respond = models.BooleanField(default=False)
+	auto_respond_new = models.BooleanField(default=True)
+	auto_respond_new_text = models.TextField(max_length=800, blank=True, default="")
+	auto_respond_closed = models.BooleanField(default=False)
+	auto_respond_closed_text = models.TextField(max_length=800, blank=True, default="")
+	
 	def get_status_tickets(self, status):
 		if status is None:
 			return self.ticket_set.none()

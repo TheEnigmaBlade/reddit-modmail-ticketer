@@ -1,3 +1,5 @@
+// Normal ticket pages
+
 function init_status_buttons() {
 	
 	function get_status_label_class(status) {
@@ -179,11 +181,25 @@ function init_last_modified_hover() {
 	});
 }
 
+// Settings pages
+
+function init_checkbox_switches() {
+	//$('.form-switch').bootstrapSwitch();
+}
+
 // Stuff to do at page load
 
 $(function() {
-	init_status_buttons();
-	init_flag_buttons();
-	init_message_hover();
-	init_last_modified_hover();
+	var $body = $('body');
+	if($body.hasClass('subreddit')) {
+		if($body.hasClass('tickets')) {
+			init_status_buttons();
+			init_flag_buttons();
+			init_message_hover();
+			init_last_modified_hover();
+		}
+		else if($body.hasClass('settings')) {
+			init_checkbox_switches();
+		}
+	}
 });

@@ -9,14 +9,38 @@
 		</div>
 		<div class="panel-body">
 			<div class="form-group">
-				<label for="id_bots">{{ form.bots.label }}</label>
+				<label for="id_bots">bots</label>
 				{{ form.bots|add_class("form-control") }}
-				<span class="help-block">{{ form.bots.help_text }}</span>
+				<span class="help-block">bot names separated by a comma, case-insensitive</span>
 			</div>
 			<div class="form-group">
-				<label for="id_hl_users">{{ form.hl_users.label }}</label>
+				<label for="id_hl_users">highlight users</label>
 				{{ form.hl_users|add_class("form-control") }}
-				<span class="help-block">{{ form.hl_users.help_text }}</span>
+				<span class="help-block">user names separated by a comma, case-insensitive</span>
+			</div>
+		</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">auto-responder settings</h2>
+		</div>
+		<div class="panel-body">
+			<span class="help-block">Automatic responses can be configured to leave replies on mod mails at different stages.</span>
+			<div class="checkbox">
+				<label>{{ form.auto_respond|add_class("form-switch") }} <b>enable automatic responses</b></label>
+			</div>
+			<div class="form-group">
+				<div class="checkbox">
+					<label>{{ form.auto_respond_new|add_class("form-switch") }} enable new message response</label>
+				</div>
+				{{ form.auto_respond_new_text|add_class("form-control") }}
+			</div>
+			<div class="form-group">
+				<div class="checkbox">
+					<label>{{ form.auto_respond_closed|add_class("form-switch") }} enable response when ticket is closed</label>
+				</div>
+				{{ form.auto_respond_closed_text|add_class("form-control") }}
 			</div>
 		</div>
 	</div>

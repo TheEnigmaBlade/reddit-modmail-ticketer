@@ -1,5 +1,5 @@
 {% extends "main/base_with_sidebar.jinja" %}
-{% set current_page = "" %}
+{% block body_class %}useless-404-body-class{% endblock %}
 
 {% block sidebar_area %}
 	{% include "main/comp/sidebar/subreddit-list.jinja" %}
