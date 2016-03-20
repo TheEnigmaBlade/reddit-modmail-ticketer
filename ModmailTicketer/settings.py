@@ -20,7 +20,7 @@ else:
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-SECRET_KEY = 'km68=u49mi9y3$_yr%6g_jtngq@i^8-1ptag&((c6002q$p&rb'
+SECRET_KEY = 'km68=u49mi9y3$_yr%6g_jtngq@i^8-1ptag&((c6002q$p&rb'	# Note: change this on a production server
 
 ALLOWED_HOSTS = ["*"]
 
